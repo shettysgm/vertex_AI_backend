@@ -1,11 +1,13 @@
-
 steps:
-  # Set the working directory to /workspace
+  # Build the Docker image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend', '-f', './Dockerfile', '.']
-    dir: 'backend'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend', '.']
+  
+  # Push the image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/backend']
+  
+  # Deploy to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -20,3 +22,4 @@ steps:
       
 images:
   - 'gcr.io/$PROJECT_ID/backend'
+
